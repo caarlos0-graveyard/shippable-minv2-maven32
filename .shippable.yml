@@ -1,0 +1,14 @@
+build_image: shipimg/ubuntu1404_base
+env:
+  - secure: FYqrkXKZhRSce+KjypMaWlda7DJM+uHeUJ0jd+nm5wfGeFSxY1ov7edXe4qfTIPpzbDjt1tL6U4lC87o2CWeJ2DcI/MgEc5RGGVYqUuwJHc2CHlLwx6vwWyhbj8+wHlYWzdJy6mAlMwrHakXHGj4MeE/QoM/6BUCPzp+VpA7nwZ5eV4lY5+xkHzOxuhsQVWN2b/5VzhjKKtm6xSonYoMQMbvMccgTTSGG3abQM26nPRgZvuhS7E1Qjn6vN8R6wDPch6ZettvhtP7Mt011lP2M/ez7i81r5BIO7T+ryDvJ6dpJimIRmDVluq65avwOntIS+Yq1mJ3PuWuO+p+WrCYAg==
+before_install:
+  - apt-get update
+  - apt-get install -y docker.io
+install:
+  - docker info
+  - docker build -t caarlos0/shipable-minv2-maven32 .
+script:
+  - docker run caarlos0/shipable-minv2-maven32 mvn -version
+after_success:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - docker push caarlos0/shipable-minv2-maven32
